@@ -1,22 +1,19 @@
 import {
-  usingCreateFeedbackItemManagerTestFixture,
-  givenTheUserInputsDetailsForANewFeedbackItem,
-  testNewFeedbackItemInput,
-  whenTheUserCreatesTheFeedbackItem,
-  thenTheFeedbackItemIsCreated,
+  submitFeedbackItem,
+  expectItemToExist,
+  createTestFixture,
+  newFeedbackItemTestInput,
+  inputFeedbackItemDetails,
 } from './create-feedback-item-manager-utils.spec';
 
 describe('createFeedbackItemManager', () => {
   it('allows the user to create a new feedback item', async () => {
-    usingCreateFeedbackItemManagerTestFixture(async (fixture) => {
-      givenTheUserInputsDetailsForANewFeedbackItem(
-        fixture,
-        testNewFeedbackItemInput
-      );
+    const fixture = createTestFixture();
 
-      await whenTheUserCreatesTheFeedbackItem(fixture);
+    inputFeedbackItemDetails(fixture, newFeedbackItemTestInput);
 
-      thenTheFeedbackItemIsCreated(fixture, testNewFeedbackItemInput);
-    });
+    const createdItemId = await submitFeedbackItem(fixture);
+
+    expectItemToExist(fixture, createdItemId, newFeedbackItemTestInput);
   });
 });

@@ -1,47 +1,44 @@
-export interface CreateFeedbackItemManagerTestFixture {
-  submitPage: CreateFeedbackItemUIEngine;
+interface TestFixture {
+  ui: CreateFeedbackItemUIEngine;
   feedback: FeedbackItemEngine;
   manager: CreateFeedbackItemManager;
 }
 
-export const testNewFeedbackItemInput = {
+export const newFeedbackItemTestInput = {
   title: 'New feedback item',
   description: 'Description of new feedback item',
   category: 'test-category',
 };
 
-export async function usingCreateFeedbackItemManagerTestFixture(
-  test: (fixture: CreateFeedbackItemManagerTestFixture) => Promise<void>
-) {
-  const createPage = new CreateFeedbackItemUIEngine();
+export function createTestFixture(): TestFixture {
+  const ui = new CreateFeedbackItemUIEngine();
   const feedback = new FeedbackItemEngine();
-  const manager = new CreateFeedbackItemManager(feedback, createPage);
+  const manager = new CreateFeedbackItemManager(feedback, ui);
 
-  const fixture = { submitPage: createPage, feedback, manager };
-  
-  await test(fixture)
+  return { ui, feedback, manager };
 }
 
-export function givenTheUserInputsDetailsForANewFeedbackItem(
-  fixture: CreateFeedbackItemManagerTestFixture,
-  testFeedbackItemInput: typeof testNewFeedbackItemInput
+export function inputFeedbackItemDetails(
+  fixture: TestFixture,
+  testFeedbackItemInput: typeof newFeedbackItemTestInput
 ) {
-  fixture.submitPage.inputTitle(testFeedbackItemInput.title);
-  fixture.submitPage.inputDescription(testFeedbackItemInput.description);
-  fixture.submitPage.inputCategory(testFeedbackItemInput.category);
+  fixture.ui.inputTitle(testFeedbackItemInput.title);
+  fixture.ui.inputDescription(testFeedbackItemInput.description);
+  fixture.ui.inputCategory(testFeedbackItemInput.category);
 }
 
-export async function whenTheUserCreatesTheFeedbackItem(
-  fixture: CreateFeedbackItemManagerTestFixture
-) {
-  fixture.submitPage.submit();
+export async function submitFeedbackItem(
+  fixture: TestFixture
+): Promise<string> {
+  return fixture.ui.submit();
 }
 
-export function thenTheFeedbackItemIsCreated(
-  fixture: CreateFeedbackItemManagerTestFixture,
-  testFeedbackItemInput: typeof testNewFeedbackItemInput
+export function expectItemToExist(
+  fixture: TestFixture,
+  createdItemId: string,
+  testFeedbackItemInput: typeof newFeedbackItemTestInput
 ) {
-  const createdFeedbackItem = fixture.feedback.getItem();
+  const createdFeedbackItem = fixture.feedback.getItem(createdItemId);
   expect(createdFeedbackItem.title).toEqual(testFeedbackItemInput.title);
   expect(createdFeedbackItem.description).toEqual(
     testFeedbackItemInput.description
