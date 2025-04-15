@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { ErrorWithCode, Result } from '../result/result';
 import { NoSqlDbQueryConstraint } from './no-sql-db-constraints';
+import { ErrorWithCode, Result } from '@j2blasco/ts-result';
 
 export type CollectionPath =
   | [string]
