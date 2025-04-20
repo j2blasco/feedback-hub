@@ -1,0 +1,13 @@
+{
+    "name": "infra",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^18",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@pulumi/gcp": "^8.27.0",
+        "@pulumi/pulumi": "^3.113.0",
+        "@pulumi/synced-folder": "^0.11.1"
+    }
+}
