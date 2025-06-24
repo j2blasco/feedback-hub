@@ -1,5 +1,5 @@
 import { usingReplayEvent } from '../../../utils/tests/replay-event.spec';
-import { IFeedbackItemRepositoryEngine, FeedbackItem, NewFeedbackItem } from './feedback-item-engine.interface';
+import { IFeedbackItemRepositoryEngine, NewFeedbackItem } from './feedback-item-engine.interface';
 
 function createEngine(): IFeedbackItemRepositoryEngine {
     throw new Error('Function not implemented.');
