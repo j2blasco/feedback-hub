@@ -1,0 +1,58 @@
+{
+  "plugins": [
+    "boundaries"
+  ],
+  "settings": {
+    "boundaries/elements": [
+      {
+        "type": "core",
+        "pattern": "src/core/**"
+      },
+      {
+        "type": "external",
+        "pattern": "src/external/**"
+      },
+      {
+        "type": "utils",
+        "pattern": "src/utils/**"
+      }
+    ]
+  },
+  "rules": {
+    "boundaries/element-types": [
+      "error",
+      {
+        "default": "disallow",
+        "rules": [
+          {
+            "from": "*",
+            "allow": [
+              "!node_modules/**"
+            ]
+          },
+          {
+            "from": "core",
+            "allow": [
+              "utils/**",
+              "core/**"
+            ]
+          },
+          {
+            "from": "external",
+            "allow": [
+              "utils/**",
+              "external/**"
+            ]
+          },
+          {
+            "from": "utils",
+            "allow": [
+              "node_modules/@j2blasco/ts-result",
+              "utils/**"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
