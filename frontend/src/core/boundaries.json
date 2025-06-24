@@ -1,7 +1,7 @@
 {
   "type": "core",
   "allow": [
-    "utils/**",
-    "core/**"
+    "utils",
+    "core"
   ]
 }

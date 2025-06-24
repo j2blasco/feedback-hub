@@ -37,7 +37,7 @@ Per-folder configuration files that define:
 ```
 
 #### Generated Configuration
-The script outputs `.eslintrc.generated.json` with:
+The script outputs `eslint-boundaries.generated.mjs` with:
 - `boundaries/elements`: Maps folder patterns to types
 - `boundaries/element-types`: Defines allowed import relationships
 
@@ -49,7 +49,7 @@ The script outputs `.eslintrc.generated.json` with:
   "type": "utils",
   "allow": [
     "node_modules/@j2blasco/ts-result",
-    "utils/**"
+    "utils"
   ]
 }
 ```
@@ -62,8 +62,8 @@ The script outputs `.eslintrc.generated.json` with:
 {
   "type": "core",
   "allow": [
-    "utils/**",
-    "core/**"
+    "utils",
+    "core"
   ]
 }
 ```
@@ -76,8 +76,8 @@ The script outputs `.eslintrc.generated.json` with:
 {
   "type": "external",
   "allow": [
-    "utils/**",
-    "external/**"
+    "utils",
+    "external"
   ]
 }
 ```
@@ -110,15 +110,15 @@ The script generates:
           },
           {
             "from": "core",
-            "allow": ["utils/**", "core/**"]
+            "allow": ["utils", "core"]
           },
           {
             "from": "external", 
-            "allow": ["utils/**", "external/**"]
+            "allow": ["utils", "external"]
           },
           {
             "from": "utils",
-            "allow": ["node_modules/@j2blasco/ts-result", "utils/**"]
+            "allow": ["node_modules/@j2blasco/ts-result", "utils"]
           }
         ]
       }
@@ -148,8 +148,8 @@ npm run boundaries:generate
 {
   "scripts": {
     "boundaries:generate": "ts-node generate-eslint-boundaries.ts",
-    "lint": "npm run boundaries:generate && ESLINT_USE_FLAT_CONFIG=false eslint \"src/**/*.ts\" --fix",
-    "lint:check": "npm run boundaries:generate && ESLINT_USE_FLAT_CONFIG=false eslint \"src/**/*.ts\""
+    "lint": "npm run boundaries:generate && eslint \"src/**/*.ts\" --fix",
+    "lint:check": "npm run boundaries:generate && eslint \"src/**/*.ts\""
   }
 }
 ```
@@ -209,13 +209,13 @@ import { Result } from '@j2blasco/ts-result';         // ❌ External cannot imp
 1. Create a new folder under `src/`
 2. Add a `boundaries.json` file:
    ```json
-   {
-     "type": "new-type",
-     "allow": [
-       "utils/**",
-       "new-type/**"
-     ]
-   }
+       {
+      "type": "new-type",
+      "allow": [
+        "utils",
+        "new-type"
+      ]
+    }
    ```
 3. Run `npm run boundaries:generate` to update the configuration
 
@@ -236,7 +236,7 @@ To allow a new external library:
      "allow": [
        "node_modules/@j2blasco/ts-result",
        "node_modules/new-library",
-       "utils/**"
+       "utils"
      ]
    }
    ```
@@ -249,8 +249,8 @@ To allow a new external library:
 ```
 frontend/
 ├── generate-eslint-boundaries.ts          # Boundary configuration generator
-├── .eslintrc.json                         # Main ESLint config (extends generated)
-├── .eslintrc.generated.json               # Generated boundary configuration
+├── eslint.config.mjs                      # Main ESLint config (imports generated)
+├── eslint-boundaries.generated.mjs        # Generated boundary configuration
 ├── src/
 │   ├── utils/
 │   │   ├── boundaries.json                # Utils layer boundaries

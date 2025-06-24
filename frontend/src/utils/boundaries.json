@@ -2,6 +2,6 @@
   "type": "utils",
   "allow": [
     "node_modules/@j2blasco/ts-result",
-    "utils/**"
+    "utils"
   ]
 }
