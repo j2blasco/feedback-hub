@@ -1,0 +1,4 @@
+{
+  "type": "app",
+  "allow": ["core", "utils"]
+}

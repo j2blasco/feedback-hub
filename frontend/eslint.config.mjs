@@ -2,8 +2,10 @@ import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import importPlugin from 'eslint-plugin-import';
+import generatedBoundaries from './eslint.config.generated.mjs';
 
 export default [
+  ...generatedBoundaries,
   js.configs.recommended,
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -44,6 +46,13 @@ export default [
     plugins: {
       '@typescript-eslint': tseslint,
       import: importPlugin,
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+        },
+      },
     },
     rules: {
       ...tseslint.configs.recommended.rules,
