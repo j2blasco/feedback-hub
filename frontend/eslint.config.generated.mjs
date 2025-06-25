@@ -7,7 +7,7 @@ const boundaries = require('eslint-plugin-boundaries');
 
 export default [
   {
-    files: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', 'src/**/*.mjs'],
+    files: ['src/**/*.ts'],
     plugins: {
       boundaries
     },

@@ -1,5 +1,10 @@
-import { usingReplayEvent } from '../../../utils/tests/replay-event.spec';
+import { usingReplayEvent } from 'utils/tests/replay-event.spec';
+import { resultSuccess } from 'utils/result/results';
 import { IFeedbackItemRepositoryEngine, NewFeedbackItem } from './feedback-item-engine.interface';
+
+function _test() {
+  return resultSuccess(1);
+}
 
 function createEngine(): IFeedbackItemRepositoryEngine {
     throw new Error('Function not implemented.');

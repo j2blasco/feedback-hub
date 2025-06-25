@@ -39,14 +39,16 @@ export class NoSqlDatabaseTesting implements INoSqlDatabase {
   private fakeCommunicationDelayMs = 0;
 
   private async simulateCommunicationDelay(): Promise<void> {
-    return new Promise(async (resolve) => {
-      // Note: we use performance to avoid the clock being mocked by the test framework
+    return new Promise((resolve) => {
       const start = performance.now();
-      while (performance.now() - start < this.fakeCommunicationDelayMs) {
-        // Busy-wait loop to simulate computational delay
-        await new Promise((resolve) => setImmediate(resolve));
-      }
-      resolve();
+      const checkDelay = () => {
+        if (performance.now() - start >= this.fakeCommunicationDelayMs) {
+          resolve();
+        } else {
+          setTimeout(checkDelay, 0);
+        }
+      };
+      checkDelay();
     });
   }
 

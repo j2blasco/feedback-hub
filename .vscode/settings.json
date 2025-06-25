@@ -1,0 +1,11 @@
+{
+  "eslint.workingDirectories": [
+    { "directory": "./frontend", "changeProcessCWD": true }
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "eslint.run": "onType",
+  "eslint.validate": ["javascript", "typescript", "html"],
+  "editor.formatOnSave": false
+}
