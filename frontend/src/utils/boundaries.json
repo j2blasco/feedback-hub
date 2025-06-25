@@ -1,0 +1,4 @@
+{
+  "name": "utils",
+  "external": ["rxjs"]
+}

@@ -34,10 +34,6 @@ export default [
     rules: {
       ...tseslint.configs.recommended.rules,
       ...importPlugin.configs.recommended.rules,
-      // Disable some import rules that are too strict for this project
-      // 'import/no-unresolved': 'off',
-      // 'import/named': 'off',
-      // Additional TypeScript rules
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -45,46 +41,14 @@ export default [
           varsIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/no-explicit-any": "warn",
-      // '@typescript-eslint/explicit-function-return-type': 'off',
       "@typescript-eslint/explicit-module-boundary-types": "off",
-      // Disable some rules that are not suitable for this project
-      "no-undef": "off", // TypeScript handles this
-      // 'no-async-promise-executor': 'off',
+      // "no-undef": "off", // TypeScript handles this
     },
   },
-  // {
-  //   files: ['**/*.js', '**/*.mjs'],
-  //   languageOptions: {
-  //     ecmaVersion: 'latest',
-  //     sourceType: 'module',
-  //     globals: {
-  //       console: 'readonly',
-  //       process: 'readonly',
-  //       Buffer: 'readonly',
-  //       global: 'readonly',
-  //     },
-  //   },
-  //   plugins: {
-  //     // import: importPlugin,
-  //   },
-  //   rules: {
-  //     // ...importPlugin.configs.recommended.rules,
-  //     // 'import/no-extraneous-dependencies': ['error', {
-  //     //   packageDir: './',
-  //     //   devDependencies: false,
-  //     //   optionalDependencies: false,
-  //     //   peerDependencies: false
-  //     // }],
-  //     // 'import/no-unresolved': 'off',
-  //     // 'import/named': 'off',
-  //   },
-  // },
   {
     ignores: [
       "node_modules/**",
       "dist/**",
-      "coverage/**",
       "*.config.js",
       "*.config.mjs",
     ],

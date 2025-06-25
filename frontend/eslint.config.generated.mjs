@@ -12,12 +12,20 @@ export default [
     },
     settings: {
       'boundaries/elements': [
-
+        { type: 'utils', pattern: 'src/utils/*' }
       ]
     },
     rules: {
       'boundaries/no-private': [2, { 'allowUncles': false }],
-
+      'boundaries/external': [
+        2,
+        {
+          default: 'disallow',
+          rules: [
+            { from: 'utils', allow: ['rxjs'] }
+          ]
+        }
+      ],
       'boundaries/element-types': [
         2,
         {
