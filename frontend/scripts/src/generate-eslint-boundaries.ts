@@ -1,7 +1,6 @@
-#!/usr/bin/env ts-node
-
 import * as fs from 'fs';
 import * as path from 'path';
+import { scritpsRootPath } from './scripts-root-path';
 
 interface BoundariesConfig {
   type: string;
@@ -102,7 +101,7 @@ function loadBoundariesConfigs(srcRoot: string): Map<string, BoundariesConfig> {
  * Generates ESLint boundaries configuration
  */
 function generateESLintConfig(): string {
-  const srcPath = path.join(__dirname, 'src');
+  const srcPath = path.join(scritpsRootPath, '../../src');
   
   if (!fs.existsSync(srcPath)) {
     console.error('src directory not found!');

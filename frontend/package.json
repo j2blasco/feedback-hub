@@ -10,7 +10,8 @@
     "serve:ssr:feedback-hub": "node dist/feedback-hub/server/server.mjs",
     "lint": "eslint src --ext .ts,.tsx,.js,.mjs",
     "lint:fix": "eslint src --ext .ts,.tsx,.js,.mjs --fix",
-    "boundaries:generate": "node generate-eslint-boundaries.js"
+    "script": "ts-node --transpile-only -r tsconfig-paths/register --project ./scripts/tsconfig.json",
+    "boundaries:generate": "npm run script ./scripts/src/generate-eslint-boundaries.ts"
   },
   "private": true,
   "dependencies": {
@@ -51,6 +52,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "~5.7.2"
   }
 }

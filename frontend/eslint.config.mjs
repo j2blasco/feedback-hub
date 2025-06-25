@@ -1,4 +1,3 @@
-import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import importPlugin from 'eslint-plugin-import';
@@ -6,7 +5,6 @@ import generatedBoundaries from './eslint.config.generated.mjs';
 
 export default [
   ...generatedBoundaries,
-  js.configs.recommended,
   {
     files: ['**/*.ts'],
     languageOptions: {
