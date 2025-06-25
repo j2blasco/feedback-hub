@@ -8,8 +8,10 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:feedback-hub": "node dist/feedback-hub/server/server.mjs",
-    "lint": "eslint src --ext .ts,.tsx,.js,.mjs",
-    "lint:fix": "eslint src --ext .ts,.tsx,.js,.mjs --fix"
+    "lint": "npm run boundaries:generate && eslint src --ext .ts,.tsx,.js,.mjs",
+    "lint:fix": "npm run boundaries:generate && eslint src --ext .ts,.tsx,.js,.mjs --fix",
+    "script": "ts-node --transpile-only -r tsconfig-paths/register --project ./scripts/tsconfig.json",
+    "boundaries:generate": "npm run script ./scripts/src/generate-eslint-boundaries.ts"
   },
   "private": true,
   "dependencies": {
@@ -40,13 +42,18 @@
     "@typescript-eslint/eslint-plugin": "^8.35.0",
     "@typescript-eslint/parser": "^8.35.0",
     "eslint": "^9.29.0",
+    "eslint-import-resolver-typescript": "^4.4.3",
+    "eslint-plugin-boundaries": "^5.0.1",
     "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.0",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "~5.7.2"
   }
 }

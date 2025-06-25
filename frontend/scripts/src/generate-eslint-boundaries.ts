@@ -1,0 +1,245 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import { scritpsRootPath } from './scripts-root-path';
+
+interface BoundariesConfig {
+  name: string;
+  internal?: string[];
+  external?: string[];
+}
+
+interface BoundaryElement {
+  type: string;
+  pattern: string;
+  folderPath: string;
+}
+
+interface InternalRule {
+  from: string;
+  allow: string[];
+}
+
+interface ExternalRule {
+  from: string;
+  allow: string[];
+}
+
+const projectRootPath = path.join(scritpsRootPath, '../..');
+
+/**
+ * Recursively scans a directory for boundaries.json files
+ */
+function scanForBoundariesFiles(
+  dir: string,
+  srcRoot: string,
+): BoundaryElement[] {
+  const elements: BoundaryElement[] = [];
+
+  try {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        // Recursively scan subdirectories
+        elements.push(...scanForBoundariesFiles(fullPath, srcRoot));
+      } else if (entry.name === 'boundaries.json') {
+        // Found a boundaries.json file
+        try {
+          const configContent = fs.readFileSync(fullPath, 'utf8');
+          const config: BoundariesConfig = JSON.parse(configContent);
+
+          // Calculate relative path from src root
+          const relativePath = path.relative(srcRoot, dir);
+          // Convert to POSIX path format
+          const posixPath = relativePath.split(path.sep).join('/');
+
+          elements.push({
+            type: config.name,
+            pattern: `src/${posixPath}/*`,
+            folderPath: posixPath,
+          });
+
+          console.log(
+            `Found boundaries.json: ${fullPath} -> name: ${config.name}`,
+          );
+        } catch (error) {
+          console.error(`Error parsing boundaries.json at ${fullPath}:`, error);
+        }
+      }
+    }
+  } catch (error) {
+    console.error(`Error scanning directory ${dir}:`, error);
+  }
+
+  return elements;
+}
+
+/**
+ * Loads boundaries configurations from all found boundaries.json files
+ */
+function loadBoundariesConfigs(srcRoot: string): Map<string, BoundariesConfig> {
+  const configs = new Map<string, BoundariesConfig>();
+
+  function scanDirectory(dir: string) {
+    try {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+
+        if (entry.isDirectory()) {
+          scanDirectory(fullPath);
+        } else if (entry.name === 'boundaries.json') {
+          try {
+            const configContent = fs.readFileSync(fullPath, 'utf8');
+            const config: BoundariesConfig = JSON.parse(configContent);
+            configs.set(config.name, config);
+          } catch (error) {
+            console.error(
+              `Error parsing boundaries.json at ${fullPath}:`,
+              error,
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error(`Error scanning directory ${dir}:`, error);
+    }
+  }
+
+  scanDirectory(srcRoot);
+  return configs;
+}
+
+/**
+ * Generates ESLint boundaries configuration
+ */
+function generateESLintConfig(): string {
+  const srcPath = path.join(projectRootPath, 'src');
+
+  if (!fs.existsSync(srcPath)) {
+    console.error('src directory not found!');
+    process.exit(1);
+  }
+
+  // Scan for boundary elements
+  const elements = scanForBoundariesFiles(srcPath, srcPath);
+
+  if (elements.length === 0) {
+    console.log(
+      'No boundaries.json files found. Generating empty configuration.',
+    );
+  }
+
+  // Load all boundaries configurations
+  const boundariesConfigs = loadBoundariesConfigs(srcPath);
+
+  // Generate element-types rules
+  const rules: InternalRule[] = [];
+  // Generate external rules
+  const externalRules: ExternalRule[] = [];
+
+  for (const element of elements) {
+    const config = boundariesConfigs.get(element.type);
+    if (config) {
+      // Add internal rule if internal dependencies are specified
+      if (config.internal && config.internal.length > 0) {
+        rules.push({
+          from: element.type,
+          allow: config.internal,
+        });
+      }
+
+      // Add external rule if external dependencies are specified
+      if (config.external && config.external.length > 0) {
+        externalRules.push({
+          from: element.type,
+          allow: config.external,
+        });
+      }
+    }
+  }
+
+  // Generate external rules section
+  const externalRulesSection =
+    externalRules.length > 0
+      ? `      'boundaries/external': [
+        2,
+        {
+          default: 'disallow',
+          rules: [
+${externalRules.map((rule) => `            { from: '${rule.from}', allow: [${rule.allow.map((a) => `'${a}'`).join(', ')}] }`).join(',\n')}
+          ]
+        }
+      ],`
+      : '';
+
+  // Generate the ESLint configuration
+  const eslintConfig = `// This file is auto-generated by generate-eslint-boundaries.ts
+// Do not edit manually!
+
+import boundaries from 'eslint-plugin-boundaries';
+
+const rules = boundaries.configs.recommended.rules;
+
+export default [
+  {
+    plugins: {
+      boundaries
+    },
+    settings: {
+      'boundaries/elements': [
+${elements.map((element) => `        { type: '${element.type}', pattern: '${element.pattern}' }`).join(',\n')}
+      ]
+    },
+    rules: {
+      'boundaries/no-private': [2, { 'allowUncles': false }],
+${externalRulesSection}
+      'boundaries/element-types': [
+        2,
+        {
+          default: 'disallow',
+          rules: [
+${rules.map((rule) => `            { from: '${rule.from}', allow: [${rule.allow.map((a) => `'${a}'`).join(', ')}] }`).join(',\n')}
+          ]
+        }
+      ]
+    }
+  }
+];
+`;
+
+  return eslintConfig;
+}
+
+/**
+ * Main function
+ */
+function main() {
+  console.log('Generating ESLint boundaries configuration...');
+
+  try {
+    const config = generateESLintConfig();
+    const outputPath = path.join(
+      projectRootPath,
+      'eslint.config.generated.mjs',
+    );
+
+    fs.writeFileSync(outputPath, config, 'utf8');
+
+    console.log(`ESLint boundaries configuration generated: ${outputPath}`);
+    console.log(
+      'Configuration is idempotent and will overwrite existing file.',
+    );
+  } catch (error) {
+    console.error('Error generating ESLint configuration:', error);
+    process.exit(1);
+  }
+}
+
+// Run the script
+if (require.main === module) {
+  main();
+}
