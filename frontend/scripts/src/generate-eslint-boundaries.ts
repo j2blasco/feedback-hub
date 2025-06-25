@@ -114,6 +114,13 @@ function generateESLintConfig(): string {
 
   const elements = scanForBoundariesFiles(srcPath, srcPath);
 
+  // Sort elements by depth (deepest first) to ensure child configs take priority over parent configs
+  elements.sort((a, b) => {
+    const depthA = a.folderPath.split('/').length;
+    const depthB = b.folderPath.split('/').length;
+    return depthB - depthA;
+  });
+
   if (elements.length === 0) {
     console.log(
       'No boundaries.json files found. Generating empty configuration.',
