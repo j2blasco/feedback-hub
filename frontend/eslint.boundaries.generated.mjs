@@ -12,7 +12,8 @@ export default [
     },
     settings: {
       'boundaries/elements': [
-        { type: 'utils', pattern: 'src/utils/*' }
+        { type: 'core', pattern: 'src/core' },
+        { type: 'utils', pattern: 'src/utils' }
       ]
     },
     rules: {
@@ -22,6 +23,7 @@ export default [
         {
           default: 'disallow',
           rules: [
+            { from: 'core', allow: ['rxjs'] },
             { from: 'utils', allow: ['rxjs'] }
           ]
         }
@@ -31,7 +33,7 @@ export default [
         {
           default: 'disallow',
           rules: [
-
+            { from: 'core', allow: ['utils'] }
           ]
         }
       ]
