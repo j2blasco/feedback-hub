@@ -8,8 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:feedback-hub": "node dist/feedback-hub/server/server.mjs",
-    "lint": "eslint src --ext .ts,.tsx,.js,.mjs",
-    "lint:fix": "eslint src --ext .ts,.tsx,.js,.mjs --fix",
+    "lint": "npm run boundaries:generate && eslint src --ext .ts,.tsx,.js,.mjs",
+    "lint:fix": "npm run boundaries:generate && eslint src --ext .ts,.tsx,.js,.mjs --fix",
     "script": "ts-node --transpile-only -r tsconfig-paths/register --project ./scripts/tsconfig.json",
     "boundaries:generate": "npm run script ./scripts/src/generate-eslint-boundaries.ts"
   },

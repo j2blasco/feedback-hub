@@ -1,5 +1,5 @@
 import { describeTest } from '../../../../utils/tests/describe-test.spec';
-import { unwrapSuccessResult, resultSuccessVoid } from 'utils/result/results';
+import { unwrapSuccessResult, resultSuccessVoid } from 'utils/result';
 import {
   DocumentPath,
   CollectionPath,

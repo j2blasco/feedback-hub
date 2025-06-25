@@ -1,4 +1,4 @@
-import { resultSuccess } from 'utils/result/results';
+import { resultSuccess } from 'utils/result';
 
 function _test() {
   return resultSuccess(1);

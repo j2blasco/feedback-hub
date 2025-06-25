@@ -1,4 +1,4 @@
 {
-  "type": "environment-tests",
-  "allow": ["core", "utils", "external"]
+  "name": "environment-tests",
+  "internal": ["core", "utils", "external"]
 }

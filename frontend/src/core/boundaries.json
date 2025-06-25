@@ -1,4 +1,5 @@
 {
-  "type": "core",
-  "allow": ["external", "utils"]
+  "name": "core",
+  "internal": ["external", "utils"],
+  "external": ["rxjs"]
 }

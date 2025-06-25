@@ -1,5 +1,5 @@
 import { usingReplayEvent } from 'utils/tests/replay-event.spec';
-import { resultSuccess } from 'utils/result/results';
+import { resultSuccess } from 'utils/result';
 import { IFeedbackItemRepositoryEngine, NewFeedbackItem } from './feedback-item-engine.interface';
 
 function _test() {

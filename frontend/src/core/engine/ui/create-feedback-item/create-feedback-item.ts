@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { ICreateFeedbackItemUIEngine, SubmittedFeedbackITem } from './create-feedback-item.interface';
 
-import { resultSuccess } from 'utils/result/results';
+import { resultSuccess } from 'utils/result';
 
 function _test() {
   return resultSuccess(1);

@@ -1,4 +1,5 @@
 {
-  "type": "external",
-  "allow": ["utils"]
+  "name": "external",
+  "internal": ["utils"],
+  "external": ["rxjs", "uuid"]
 }

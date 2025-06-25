@@ -1,4 +1,4 @@
 {
-  "type": "app",
-  "allow": ["core", "utils"]
+  "name": "app",
+  "internal": ["core", "utils"]
 }

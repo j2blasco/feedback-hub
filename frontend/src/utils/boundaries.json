@@ -1,4 +1,5 @@
 {
-  "type": "utils",
-  "allow": []
+  "name": "utils",
+  "internal": [],
+  "external": ["rxjs"]
 }

@@ -2,22 +2,38 @@
 import { Subject } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { NoSqlDbQueryConstraint } from '../no-sql-db-constraints';
-import { INoSqlDatabase, NoSqlDbPath, DocumentPath, CollectionPath } from '../no-sql-db.interface';
-import { ErrorWithCode, Result, resultError, resultSuccess } from '@j2blasco/ts-result';
+import {
+  INoSqlDatabase,
+  NoSqlDbPath,
+  DocumentPath,
+  CollectionPath,
+} from '../no-sql-db.interface';
+import {
+  ErrorWithCode,
+  Result,
+  resultError,
+  resultSuccess,
+} from 'utils/result';
 
 export function createNoSqlDatabaseTesting() {
   return new NoSqlDatabaseTesting();
 }
 
-function deepMerge(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
+function deepMerge(
+  target: Record<string, unknown>,
+  source: Record<string, unknown>,
+): Record<string, unknown> {
   for (const key of Object.keys(source)) {
     if (
-      (source[key] instanceof Object) &&
+      source[key] instanceof Object &&
       key in target &&
-      (target[key] instanceof Object) &&
+      target[key] instanceof Object &&
       !(target[key] instanceof Array)
     ) {
-      deepMerge(target[key] as Record<string, unknown>, source[key] as Record<string, unknown>);
+      deepMerge(
+        target[key] as Record<string, unknown>,
+        source[key] as Record<string, unknown>,
+      );
     } else {
       target[key] = source[key];
     }
@@ -158,21 +174,37 @@ export class NoSqlDatabaseTesting implements INoSqlDatabase {
     await this.simulateCommunicationDelay();
     data = this.copyElement(data);
     // Traverse to the second-to-last element in the path, creating any missing levels
-    const parentElement = path.slice(0, -1).reduce((acc: unknown, key: string) => {
-      if (acc && typeof acc === 'object') {
-        if (!(key in acc)) (acc as Record<string, unknown>)[key] = {};
-        return (acc as Record<string, unknown>)[key];
-      }
-      return undefined;
-    }, this.dataStore);
+    const parentElement = path
+      .slice(0, -1)
+      .reduce((acc: unknown, key: string) => {
+        if (acc && typeof acc === 'object') {
+          if (!(key in acc)) (acc as Record<string, unknown>)[key] = {};
+          return (acc as Record<string, unknown>)[key];
+        }
+        return undefined;
+      }, this.dataStore);
     const lastKey = path[path.length - 1];
     // Capture the current state of the data before modification
-    const before = parentElement && typeof parentElement === 'object' && (parentElement as Record<string, unknown>)[lastKey]
-      ? this.copyElement((parentElement as Record<string, unknown>)[lastKey])
-      : null;
+    const before =
+      parentElement &&
+      typeof parentElement === 'object' &&
+      (parentElement as Record<string, unknown>)[lastKey]
+        ? this.copyElement((parentElement as Record<string, unknown>)[lastKey])
+        : null;
     // Merge existing data with new data if it's an object, otherwise overwrite
-    if (parentElement && typeof parentElement === 'object' && (parentElement as Record<string, unknown>)[lastKey] && typeof (parentElement as Record<string, unknown>)[lastKey] === 'object') {
-      deepMerge((parentElement as Record<string, unknown>)[lastKey] as Record<string, unknown>, data as Record<string, unknown>);
+    if (
+      parentElement &&
+      typeof parentElement === 'object' &&
+      (parentElement as Record<string, unknown>)[lastKey] &&
+      typeof (parentElement as Record<string, unknown>)[lastKey] === 'object'
+    ) {
+      deepMerge(
+        (parentElement as Record<string, unknown>)[lastKey] as Record<
+          string,
+          unknown
+        >,
+        data as Record<string, unknown>,
+      );
     } else if (parentElement && typeof parentElement === 'object') {
       (parentElement as Record<string, unknown>)[lastKey] = data;
     }
@@ -180,7 +212,11 @@ export class NoSqlDatabaseTesting implements INoSqlDatabase {
     this.onWrite$.next({
       path,
       before: this.copyElement(before),
-      after: this.copyElement(parentElement && typeof parentElement === 'object' ? (parentElement as Record<string, unknown>)[lastKey] : undefined),
+      after: this.copyElement(
+        parentElement && typeof parentElement === 'object'
+          ? (parentElement as Record<string, unknown>)[lastKey]
+          : undefined,
+      ),
     });
   }
 
@@ -215,7 +251,9 @@ export class NoSqlDatabaseTesting implements INoSqlDatabase {
         Object.keys(before as object).forEach((docId) => {
           this.onDelete$.next({
             path: [...path, docId],
-            before: this.copyElement((before as Record<string, unknown>)[docId]),
+            before: this.copyElement(
+              (before as Record<string, unknown>)[docId],
+            ),
           });
         });
       }
