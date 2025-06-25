@@ -27,7 +27,7 @@ export default [
           default: 'disallow',
           rules: [
             { from: 'app', allow: ['core', 'utils'] },
-            { from: 'core', allow: ['utils', 'external'] },
+            { from: 'core', allow: ['external'] },
             { from: 'environment-tests', allow: ['core', 'utils', 'external'] },
             { from: 'external', allow: ['utils'] },
             { from: 'utils', allow: [] }

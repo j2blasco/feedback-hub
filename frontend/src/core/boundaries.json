@@ -1,4 +1,4 @@
 {
   "type": "core",
-  "allow": ["utils", "external"]
+  "allow": ["external"]
 }
