@@ -1,52 +1,31 @@
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsparser from '@typescript-eslint/parser';
-import importPlugin from 'eslint-plugin-import';
-import generatedBoundaries from './eslint.config.generated.mjs';
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
+import importPlugin from "eslint-plugin-import";
+import generatedBoundaries from "./eslint.config.generated.mjs";
+import prettier from "eslint-plugin-prettier";
 
 export default [
   ...generatedBoundaries,
   {
-    files: ['**/*.ts'],
+    files: ["**/*.ts"],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        project: './tsconfig.json',
+        ecmaVersion: "latest",
+        sourceType: "module",
+        project: "./tsconfig.json",
       },
       globals: {
-        // // Browser globals
-        // window: 'readonly',
-        // document: 'readonly',
-        console: 'readonly',
-        // process: 'readonly',
-        // Buffer: 'readonly',
-        // global: 'readonly',
-        // // Testing globals
-        // describe: 'readonly',
-        // it: 'readonly',
-        // test: 'readonly',
-        // expect: 'readonly',
-        // beforeEach: 'readonly',
-        // afterEach: 'readonly',
-        // beforeAll: 'readonly',
-        // afterAll: 'readonly',
-        // fdescribe: 'readonly',
-        // fit: 'readonly',
-        // jasmine: 'readonly',
-        // // Performance API
-        // performance: 'readonly',
-        // // Node.js globals
-        // setImmediate: 'readonly',
-        // clearImmediate: 'readonly',
+        console: "readonly",
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint,
+      "@typescript-eslint": tseslint,
       import: importPlugin,
+      prettier,
     },
     settings: {
-      'import/resolver': {
+      "import/resolver": {
         typescript: {
           alwaysTryTypes: true,
         },
@@ -59,15 +38,18 @@ export default [
       // 'import/no-unresolved': 'off',
       // 'import/named': 'off',
       // Additional TypeScript rules
-      '@typescript-eslint/no-unused-vars': ['error', { 
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_'
-      }],
-      '@typescript-eslint/no-explicit-any': 'warn',
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
+      "@typescript-eslint/no-explicit-any": "warn",
       // '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      "@typescript-eslint/explicit-module-boundary-types": "off",
       // Disable some rules that are not suitable for this project
-      'no-undef': 'off', // TypeScript handles this
+      "no-undef": "off", // TypeScript handles this
       // 'no-async-promise-executor': 'off',
     },
   },
@@ -100,11 +82,11 @@ export default [
   // },
   {
     ignores: [
-      'node_modules/**',
-      'dist/**',
-      'coverage/**',
-      '*.config.js',
-      '*.config.mjs',
+      "node_modules/**",
+      "dist/**",
+      "coverage/**",
+      "*.config.js",
+      "*.config.mjs",
     ],
   },
-]; 
+];

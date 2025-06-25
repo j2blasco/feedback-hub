@@ -18,6 +18,8 @@ interface ESLintRule {
   allow: string[];
 }
 
+const projectRootPath = path.join(scritpsRootPath, "../..");
+
 /**
  * Recursively scans a directory for boundaries.json files
  */
@@ -101,7 +103,7 @@ function loadBoundariesConfigs(srcRoot: string): Map<string, BoundariesConfig> {
  * Generates ESLint boundaries configuration
  */
 function generateESLintConfig(): string {
-  const srcPath = path.join(scritpsRootPath, '../../src');
+  const srcPath = path.join(projectRootPath, 'src');
   
   if (!fs.existsSync(srcPath)) {
     console.error('src directory not found!');
@@ -173,7 +175,7 @@ function main() {
   
   try {
     const config = generateESLintConfig();
-    const outputPath = path.join(__dirname, 'eslint.config.generated.mjs');
+    const outputPath = path.join(projectRootPath, 'eslint.config.generated.mjs');
     
     fs.writeFileSync(outputPath, config, 'utf8');
     
