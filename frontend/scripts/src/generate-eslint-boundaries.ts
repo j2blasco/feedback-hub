@@ -51,7 +51,7 @@ function scanForBoundariesFiles(
 
           elements.push({
             type: config.name,
-            pattern: `src/${posixPath}/*`,
+            pattern: `src/${posixPath}`,
             folderPath: posixPath,
           });
 
