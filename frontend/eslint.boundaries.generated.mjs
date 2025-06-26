@@ -3,8 +3,6 @@
 
 import boundaries from 'eslint-plugin-boundaries';
 
-const rules = boundaries.configs.recommended.rules;
-
 export default [
   {
     plugins: {

@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject } from "rxjs";
 
-export function usingReplayEvent<T>(
+export function observableAsReplaySubject<T>(
   observable: Observable<T>,
   callback: (replay: ReplaySubject<T>) => void
 ): void {
@@ -9,7 +9,7 @@ export function usingReplayEvent<T>(
   callback(replay);
 }
 
-export async function usingReplayEventAsync<T>(
+export async function observableAsReplaySubjectAsync<T>(
   observable: Observable<T>,
   callback: (replay: ReplaySubject<T>) => Promise<void>
 ): Promise<void> {

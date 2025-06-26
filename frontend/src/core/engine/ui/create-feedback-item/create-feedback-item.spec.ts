@@ -1,8 +1,8 @@
 import { ICreateFeedbackItemUIEngine } from './create-feedback-item.interface';
 import { CreateFeedbackItemUIEngine } from './create-feedback-item';
 import {
-  usingReplayEventAsync,
-} from '../../../../utils/tests/replay-event.spec';
+  observableAsReplaySubject,
+} from 'utils/tests/replay-event.spec';
 import { firstValueFrom } from 'rxjs';
 
 function createUIEngine(): ICreateFeedbackItemUIEngine {
@@ -17,7 +17,7 @@ describe('CreateFeedbackItemUIEngine', () => {
   });
 
   it('should emit a new feedback item on submit', async () => {
-    await usingReplayEventAsync(engine.onSubmit$, async (replay) => {
+    await observableAsReplaySubject(engine.onSubmit$, async (replay) => {
       const expectedValue = {
         title: 'Test Title',
         description: 'Test Description',
