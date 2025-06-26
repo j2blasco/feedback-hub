@@ -3,7 +3,7 @@ import { ICreateFeedbackItemUIEngine } from 'core/engine/ui/create-feedback-item
 
 export class CreateFeedbackItemManager {
   constructor(
-    ui: ICreateFeedbackItemUIEngine,
-    repository: IFeedbackItemRepositoryEngine
+    _ui: ICreateFeedbackItemUIEngine,
+    _repository: IFeedbackItemRepositoryEngine
   ) {}
 }

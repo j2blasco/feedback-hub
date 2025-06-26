@@ -1,7 +1,6 @@
 import { firstValueFrom } from 'rxjs';
 import { CreateFeedbackItemUIEngine } from 'core/engine/ui/create-feedback-item/create-feedback-item';
 import {
-  observableAsReplaySubject,
   observableAsReplaySubjectAsync,
 } from 'utils/tests/replay-event.spec';
 import { IFeedbackItemRepositoryEngine } from 'core/engine/feedback-item/feedback-item-engine.interface';
