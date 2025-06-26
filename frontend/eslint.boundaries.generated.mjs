@@ -13,6 +13,7 @@ export default [
         { type: 'core', pattern: 'src/core' },
         { type: 'utils', pattern: 'src/utils' }
       ]
+  
     },
     rules: {
       'boundaries/no-private': [2, { 'allowUncles': false }],
