@@ -1,5 +1,5 @@
 {
   "name": "core",
-  "internal": ["utils"],
+  "internal": ["utils", "data-repository"],
   "external": ["rxjs"]
 }

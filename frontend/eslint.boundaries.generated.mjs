@@ -10,6 +10,9 @@ export default [
     },
     settings: {
       'boundaries/elements': [
+        { type: 'no-sql-db', pattern: 'src/core/engine/no-sql-db/providers/fake' },
+        { type: 'no-sql-db', pattern: 'src/core/engine/no-sql-db/core' },
+        { type: 'data-repository', pattern: 'src/core/engine/data-repository' },
         { type: 'core', pattern: 'src/core' },
         { type: 'utils', pattern: 'src/utils' }
       ] 
@@ -21,6 +24,9 @@ export default [
         {
           default: 'disallow',
           rules: [
+            { from: 'no-sql-db', allow: ['@j2blasco/ts-crud'] },
+            { from: 'no-sql-db', allow: ['@j2blasco/ts-crud'] },
+            { from: 'data-repository', allow: ['rxjs'] },
             { from: 'core', allow: ['rxjs'] },
             { from: 'utils', allow: ['rxjs'] }
           ]
@@ -31,7 +37,8 @@ export default [
         {
           default: 'disallow',
           rules: [
-            { from: 'core', allow: ['utils'] }
+            { from: 'data-repository', allow: ['no-sql-db', 'utils'] },
+            { from: 'core', allow: ['utils', 'data-repository'] }
           ]
         }
       ]

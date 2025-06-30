@@ -1,0 +1,1 @@
+export * from "@j2blasco/ts-crud";

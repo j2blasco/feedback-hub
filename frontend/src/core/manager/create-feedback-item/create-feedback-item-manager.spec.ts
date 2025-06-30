@@ -6,7 +6,7 @@ import {
   inputFeedbackItemDetails,
 } from './create-feedback-item-manager-utils.spec';
 
-xdescribe('CreateFeedbackItemManager', () => {
+describe('CreateFeedbackItemManager', () => {
   it('allows the user to create a new feedback item', async () => {
     const fixture = createTestFixture();
 
@@ -14,6 +14,6 @@ xdescribe('CreateFeedbackItemManager', () => {
 
     const createdItemId = await submitFeedbackItem(fixture);
 
-    expectItemToExist(fixture, createdItemId, newFeedbackItemTestInput);
+    await expectItemToExist(fixture, createdItemId, newFeedbackItemTestInput);
   });
 });

@@ -1,0 +1,5 @@
+{
+  "name": "data-repository",
+  "external": ["rxjs"],
+  "internal": ["no-sql-db", "utils"]
+}

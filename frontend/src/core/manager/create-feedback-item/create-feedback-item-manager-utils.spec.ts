@@ -3,10 +3,12 @@ import { CreateFeedbackItemUIEngine } from 'core/engine/ui/create-feedback-item/
 import {
   observableAsReplaySubjectAsync,
 } from 'utils/tests/replay-event.spec';
-import { IFeedbackItemRepositoryEngine } from 'core/engine/feedback-item/feedback-item-engine.interface';
+import { IFeedbackItemRepositoryEngine } from 'core/engine/data-repository/feedback-item/feedback-item-repository-engine.interface';
 import { ICreateFeedbackItemUIEngine } from 'core/engine/ui/create-feedback-item/create-feedback-item.interface';
-import { FeedbackItemRepositoryEngine } from 'core/engine/feedback-item/feedback-item-engine';
+import { FeedbackItemRepositoryEngine } from 'core/engine/data-repository/feedback-item/feedback-item-repository-engine';
 import { CreateFeedbackItemManager } from './create-feedback-item-manager';
+// eslint-disable-next-line boundaries/element-types
+import { NoSqlDatabaseTesting } from 'core/engine/no-sql-db/providers/fake/no-sql-db.fake';
 
 interface TestFixture {
   ui: ICreateFeedbackItemUIEngine;
@@ -22,7 +24,7 @@ export const newFeedbackItemTestInput = {
 
 export function createTestFixture(): TestFixture {
   const ui = new CreateFeedbackItemUIEngine();
-  const repository = new FeedbackItemRepositoryEngine();
+  const repository = new FeedbackItemRepositoryEngine(new NoSqlDatabaseTesting);
   const manager = new CreateFeedbackItemManager(ui, repository);
 
   return { ui, repository, manager };
@@ -51,12 +53,12 @@ export async function submitFeedbackItem(
   return createdItemId;
 }
 
-export function expectItemToExist(
+export async function expectItemToExist(
   fixture: TestFixture,
   createdItemId: string,
   testFeedbackItemInput: typeof newFeedbackItemTestInput
 ) {
-  const createdFeedbackItem = fixture.repository.getItem(createdItemId);
+  const createdFeedbackItem = (await fixture.repository.get(createdItemId)).unwrapOrThrow();
   expect(createdFeedbackItem.title).toEqual(testFeedbackItemInput.title);
   expect(createdFeedbackItem.description).toEqual(
     testFeedbackItemInput.description
