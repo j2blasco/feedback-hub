@@ -1,20 +1,10 @@
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 import { CreateFeedbackItemUIEngine } from 'core/engine/ui/create-feedback-item/create-feedback-item';
-import {
-  observableAsReplaySubjectAsync,
-} from 'utils/tests/replay-event.spec';
-import { IFeedbackItemRepositoryEngine } from 'core/engine/data-repository/feedback-item/feedback-item-repository-engine.interface';
-import { ICreateFeedbackItemUIEngine } from 'core/engine/ui/create-feedback-item/create-feedback-item.interface';
+import { observableAsReplaySubjectAsync } from 'utils/tests/replay-event.spec';
 import { FeedbackItemRepositoryEngine } from 'core/engine/data-repository/feedback-item/feedback-item-repository-engine';
 import { CreateFeedbackItemManager } from './create-feedback-item-manager';
 // eslint-disable-next-line boundaries/element-types
 import { NoSqlDatabaseTesting } from 'core/engine/no-sql-db/providers/fake/no-sql-db.fake';
-
-interface TestFixture {
-  ui: ICreateFeedbackItemUIEngine;
-  repository: IFeedbackItemRepositoryEngine;
-  manager: CreateFeedbackItemManager;
-}
 
 export const newFeedbackItemTestInput = {
   title: 'New feedback item',
@@ -22,17 +12,22 @@ export const newFeedbackItemTestInput = {
   category: 'test-category',
 };
 
-export function createTestFixture(): TestFixture {
+export function createTestFixture() {
   const ui = new CreateFeedbackItemUIEngine();
-  const repository = new FeedbackItemRepositoryEngine(new NoSqlDatabaseTesting);
-  const manager = new CreateFeedbackItemManager(ui, repository);
+  const repository = new FeedbackItemRepositoryEngine(
+    new NoSqlDatabaseTesting(),
+  );
+  const destroyed$ = new Subject<void>();
+  const manager = new CreateFeedbackItemManager(ui, repository, destroyed$);
 
-  return { ui, repository, manager };
+  return { ui, repository, manager, destroyed$ };
 }
+
+export type TestFixture = ReturnType<typeof createTestFixture>;
 
 export function inputFeedbackItemDetails(
   fixture: TestFixture,
-  testFeedbackItemInput: typeof newFeedbackItemTestInput
+  testFeedbackItemInput: typeof newFeedbackItemTestInput,
 ) {
   fixture.ui.inputTitle(testFeedbackItemInput.title);
   fixture.ui.inputDescription(testFeedbackItemInput.description);
@@ -40,15 +35,15 @@ export function inputFeedbackItemDetails(
 }
 
 export async function submitFeedbackItem(
-  fixture: TestFixture
+  fixture: TestFixture,
 ): Promise<string> {
-  let createdItemId: string = "";
+  let createdItemId: string = '';
   await observableAsReplaySubjectAsync(
     fixture.repository.onCreate$,
     async (replay) => {
       fixture.ui.submit();
       createdItemId = await firstValueFrom(replay);
-    }
+    },
   );
   return createdItemId;
 }
@@ -56,12 +51,14 @@ export async function submitFeedbackItem(
 export async function expectItemToExist(
   fixture: TestFixture,
   createdItemId: string,
-  testFeedbackItemInput: typeof newFeedbackItemTestInput
+  testFeedbackItemInput: typeof newFeedbackItemTestInput,
 ) {
-  const createdFeedbackItem = (await fixture.repository.get(createdItemId)).unwrapOrThrow();
+  const createdFeedbackItem = (
+    await fixture.repository.get(createdItemId)
+  ).unwrapOrThrow();
   expect(createdFeedbackItem.title).toEqual(testFeedbackItemInput.title);
   expect(createdFeedbackItem.description).toEqual(
-    testFeedbackItemInput.description
+    testFeedbackItemInput.description,
   );
   expect(createdFeedbackItem.category).toEqual(testFeedbackItemInput.category);
 }
